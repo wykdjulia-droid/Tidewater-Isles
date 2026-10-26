@@ -654,7 +654,7 @@ const TREE_START=180000,TREE_STAGE=60000,TREE_GAP=2;
 let trees=new Map(),decided=new Uint8Array(N*N),houses=new Map();
 const HSPR=[[0,0,95,73],[97,0,211,61],[213,0,305,65],[307,0,414,55],[416,0,502,77],[504,0,597,95],[599,0,715,81],[717,0,809,89],[811,0,917,73],[919,0,1004,99],
   [1006,0,1101,73],[1103,0,1217,61],[1219,0,1311,65],[1313,0,1399,77]];
-HSPR[16]=HSPR[3];   // the tavern: the log cabin, opened for business
+HSPR[16]=HSPR[3];HSPR[17]=HSPR[3];   // the tavern: the log cabin, opened for business
 // small house design -> its shop (bakery, carpenter, tavern, grocer); the log cabin (3) has none
 // small house -> shop: white cottage=bakery, stone=carpenter, timber-frame=fisherman's cottage, log cabin=tavern, brown roof=grocer
 const SHOP_OF={0:10,1:11,2:12,3:16,4:13},SHOP_MS=300000,FISHER=12;
@@ -670,6 +670,16 @@ const isCastle=h=>!!h&&h.v===CASTLE;
 const WITCH=15;
 const witchImg=new Image();witchImg.src="data:image/png;base64,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";
 const isWitch=h=>!!h&&h.v===WITCH;
+// ---- the shepherd: the kingdom has only one witch; the first house on the next lone island is a shepherd's hut,
+// the log cabin with a red roof. A shepherd in a goral outfit lives there with three sheep that follow him about.
+const SHEPHERD=17;const isShepherd=h=>!!h&&h.v===SHEPHERD;
+let shepHut=null;
+function makeShepHut(){if(shepHut||!houseImg.complete||!houseImg.naturalWidth)return;const b=HSPR[3],w=b[2]-b[0],hh=b[3]-b[1],c=document.createElement('canvas');c.width=w;c.height=hh;
+  const x=c.getContext('2d');x.drawImage(houseImg,b[0],b[1],w,hh,0,0,w,hh);const d=x.getImageData(0,0,w,hh),a=d.data;
+  // the mossy green roof becomes red clay; only the roof rows, so the bushes and grass at the bottom stay green
+  const M={'143,209,80':[226,92,70],'104,170,70':[196,64,56],'62,154,86':[160,46,46],'40,110,80':[118,32,38],'206,242,124':[246,150,122],'29,58,34':[72,22,26],'236,124,134':[240,176,128]};
+  for(let y=0;y<Math.min(hh,31);y++)for(let q=0;q<w;q++){const o=(y*w+q)*4;if(!a[o+3])continue;const m=M[a[o]+','+a[o+1]+','+a[o+2]];if(m){a[o]=m[0];a[o+1]=m[1];a[o+2]=m[2];}}
+  x.putImageData(d,0,0);shepHut=c;}
 function remoteIsland(i){if(!grid[i])return false;const size=new Map();
   for(let j=0;j<N*N;j++)if(grid[j])size.set(comp[j],(size.get(comp[j])||0)+1);
   let main=-1,best=-1;for(const[c,n]of size)if(n>best){best=n;main=c;}
@@ -789,16 +799,17 @@ function drawTrees(){
   sizeTrees();tctx.clearRect(0,0,tc.width,tc.height);if(!sheet.complete||!sheet.naturalWidth)return;
   const now=Date.now(),ts=tc.width/N;let k=ts/18;if(k>=1.5)k=Math.round(k);tctx.imageSmoothingEnabled=k<1;tctx.imageSmoothingQuality='high';
   let grown=0;
-  const pnow=performance.now(),dt=Math.min(200,lastPT?pnow-lastPT:16);lastPT=pnow;updatePeople(now,dt);updatePrincesses(now,dt);updateDragon(now,dt);updateRescues(now,dt);updateTrips(now,dt);updateCats(now,dt);updateDeer(now,dt);
+  const pnow=performance.now(),dt=Math.min(200,lastPT?pnow-lastPT:16);lastPT=pnow;updatePeople(now,dt);updatePrincesses(now,dt);updateDragon(now,dt);updateRescues(now,dt);updateTrips(now,dt);updateCats(now,dt);updateSheep(now,dt);updateDeer(now,dt);
   const kp=Math.max(2,Math.round((k>=3?k-1:k*.75)*1.5));
   tctx.imageSmoothingEnabled=false;drawFields(ts,Math.max(1,Math.round(2*ts/48*2)/2),now);tctx.imageSmoothingEnabled=k<1;dragonShadow(ts,now);
   const list=[...trees.entries()].filter(([i])=>grid[i]).map(([i,t])=>[i,t,0,((i/N)|0)+.86+(i%N)*1e-4])
     .concat([...houses.entries()].map(([i,h])=>[i,h,1,((i/N)|0)+.95+(i%N)*1e-4]))
-    .concat([...people.entries()].filter(([,p])=>!p.inBoat).map(([i,p])=>[i,p,2,p.y])).concat([...lights.entries()].map(([c,l])=>['l'+c,l,7,((c/N)|0)+.88])).concat([...bushes.entries()].map(([c,b])=>['u'+c,b,8,b.y])).concat([...squares.entries()].flatMap(([k,q])=>[['f'+k,q,9,((k/N)|0)+1.45],['n'+k,q,10,((k/N)|0)+.42]])).concat(festival&&squares.has(festival.k)?festivalSpots(festival.k).map(([x,y,bl],j)=>['s'+j,{x,y,bl},11,y]):[]).concat([...kids.entries()].map(([i,c])=>['c'+i,c,2,c.y])).concat([...trips.entries()].map(([i,r])=>['t'+i,r,5,r.boat.y+.2])).concat(deer.map(d=>[d.id,d,3,d.y])).concat([...cats.entries()].map(([i,c])=>[i,c,4,c.y])).concat([...princesses.entries()].map(([i,q])=>['p'+i,q,2,q.y])).concat([...rescues.entries()].flatMap(([i,r])=>[['b'+i,r,5,r.boat.y+.2]].concat(r.knight&&!r.knight.inBoat&&r.stage!=='away'?[['k'+i,r.knight,6,r.knight.y]]:[],r.escort&&!r.escort.inBoat?[['e'+i,r.escort,6,r.escort.y]]:[]))).sort((a,b)=>a[3]-b[3]);
+    .concat([...people.entries()].filter(([,p])=>!p.inBoat).map(([i,p])=>[i,p,2,p.y])).concat([...lights.entries()].map(([c,l])=>['l'+c,l,7,((c/N)|0)+.88])).concat([...bushes.entries()].map(([c,b])=>['u'+c,b,8,b.y])).concat([...squares.entries()].flatMap(([k,q])=>[['f'+k,q,9,((k/N)|0)+1.45],['n'+k,q,10,((k/N)|0)+.42]])).concat(festival&&squares.has(festival.k)?festivalSpots(festival.k).map(([x,y,bl],j)=>['s'+j,{x,y,bl},11,y]):[]).concat([...kids.entries()].map(([i,c])=>['c'+i,c,2,c.y])).concat([...trips.entries()].map(([i,r])=>['t'+i,r,5,r.boat.y+.2])).concat(deer.map(d=>[d.id,d,3,d.y])).concat([...cats.entries()].map(([i,c])=>[i,c,4,c.y])).concat([...sheep.entries()].flatMap(([i,a])=>a.map((s,j)=>['h'+i+'_'+j,s,12,s.y]))).concat([...princesses.entries()].map(([i,q])=>['p'+i,q,2,q.y])).concat([...rescues.entries()].flatMap(([i,r])=>[['b'+i,r,5,r.boat.y+.2]].concat(r.knight&&!r.knight.inBoat&&r.stage!=='away'?[['k'+i,r.knight,6,r.knight.y]]:[],r.escort&&!r.escort.inBoat?[['e'+i,r.escort,6,r.escort.y]]:[]))).sort((a,b)=>a[3]-b[3]);
   for(const[i,t,kind]of list){const isHouse=kind===1;
     if(kind===2){drawPerson(t,ts,kp,now);continue;}
     if(kind===3){drawDeer(t,ts,kp,now);continue;}
     if(kind===4){drawCat(t,ts,kp,now);continue;}
+    if(kind===12){drawSheep(t,ts,kp,now);continue;}
     if(kind===5){drawBoat(t,ts,kp,now);continue;}
     if(kind===7){drawLantern(+String(i).slice(1),t,ts,kp,now);continue;}
     if(kind===8){drawBush(t,ts,kp,now);continue;}
@@ -820,10 +831,11 @@ function drawTrees(){
       tctx.drawImage(castleImg,0,0,sw,sh,-Math.round(w/2),0,w,h);tctx.restore();tctx.imageSmoothingEnabled=k<1;continue;}
     if(isHouse){if(!houseImg.complete)continue;const since=now-t.t,p=Math.min(1,since/400),pop=since<400?0.7+0.3*(1+2.7*Math.pow(p-1,3)+1.7*Math.pow(p-1,2)):1;
       const kh=k>=3?k-1:k*.75;tctx.imageSmoothingEnabled=!Number.isInteger(kh);
-      const hb=HSPR[t.v??hash(i,3)%5],flip=t.f??(hash(i,9)%2===1),sw=hb[2]-hb[0],sh=hb[3]-hb[1];
+      if(t.v===SHEPHERD)makeShepHut();const src=t.v===SHEPHERD&&shepHut?shepHut:houseImg;
+      const hb=src===shepHut?[0,0,shepHut.width,shepHut.height]:HSPR[t.v??hash(i,3)%5],flip=t.f??(hash(i,9)%2===1),sw=hb[2]-hb[0],sh=hb[3]-hb[1];
       const w=Math.round(sw*kh*pop),h=Math.round(sh*kh*pop),cx=(i%N)*ts+ts/2,by=((i/N)|0)*ts+ts*.95;
       tctx.save();tctx.translate(Math.round(cx),Math.round(by-h));if(flip)tctx.scale(-1,1);
-      tctx.drawImage(houseImg,hb[0],hb[1],sw,sh,-Math.round(w/2),0,w,h);tctx.restore();tctx.imageSmoothingEnabled=k<1;continue;}
+      tctx.drawImage(src,hb[0],hb[1],sw,sh,-Math.round(w/2),0,w,h);tctx.restore();tctx.imageSmoothingEnabled=k<1;continue;}
     const el=now-t.start;if(el<0)continue;
     const st=Math.min(3,Math.floor(el/TREE_STAGE));if(st===3)grown++;
     const since=el-st*TREE_STAGE,p=Math.min(1,since/350),pop=since<350?0.75+0.25*(1+2.7*Math.pow(p-1,3)+1.7*Math.pow(p-1,2)):1;
@@ -841,7 +853,7 @@ function drawTrees(){
   const el=$('sTree');if(el)el.textContent=grown;let shops=0,castles=0;for(const h of houses.values()){if(isCastle(h))castles++;else if(((h.v??0)>=10&&(h.v??0)<=13)||h.v===16)shops++;}
   const ec=$('sCastle');if(ec)ec.textContent=castles;
   const eh=$('sHouse');if(eh)eh.textContent=houses.size-shops;const es=$('sShop');if(es)es.textContent=shops;}
-sheet.onload=drawTrees;houseImg.onload=drawTrees;castleImg.onload=drawTrees;witchImg.onload=drawTrees;window.addEventListener('resize',drawTrees);
+sheet.onload=drawTrees;houseImg.onload=()=>{makeShepHut();drawTrees();};castleImg.onload=drawTrees;witchImg.onload=drawTrees;window.addEventListener('resize',drawTrees);
 // ---- villagers: one steps out of each house 6 minutes after it was built, then wanders the yard.
 // The grocer goes fishing at a lake on his island; the baker clears a 2x2 plot and farms wheat.
 const PERSON_MS=360000,WALK=0.55,GROCER=13,BAKERY=10,WHEAT_STAGE=60000;
@@ -858,6 +870,8 @@ function kingLook(i){return{G:'#f2c94c',H:'#e6e1d6',W:'#f7f3ea',S:SKIN[hash(i,12
 // the witch: tall pointy hat with a purple band, orange hair, purple dress; she carries a broom
 const WITCH_BODY=['..K..','..K..','.KKK.','.KVK.','KKKKK','HSSSH','.SSS.','SDDDS','SDDDS','.DDD.','.PPP.'];
 function witchLook(i){return{K:'#2b2440',V:'#8a5fa8',H:'#e07b39',S:SKIN[hash(i,12)%SKIN.length],D:'#6a3f8f',P:'#4a2c66',B:'#1f1a26'};}
+const SHEP_BODY=['.KKK.','.WWW.','KKKKK','HSSSH','.SSS.','VCCCV','VCRCV','LGLGL','.PRP.'];
+function shepLook(i){return{K:'#22201f',W:'#fafaf0',H:HAIR[hash(i,11)%2],S:SKIN[hash(i,12)%SKIN.length],V:'#c9a37a',C:'#f4f1e6',R:'#c8453d',L:'#6b4a2e',G:'#e0b04a',P:'#ece6d6',B:'#5a3b26'};}
 function personLook(i){return{H:HAIR[hash(i,11)%HAIR.length],S:SKIN[hash(i,12)%SKIN.length],C:SHIRT[hash(i,13)%SHIRT.length],P:PANTS[hash(i,14)%PANTS.length],B:'#2a211c'};}
 const onGrass=(x,y)=>grassAt(Math.floor(x*T),Math.floor(y*T))&&L(Math.floor(x),Math.floor(y));
 const D4=[[1,0],[-1,0],[0,1],[0,-1]];
@@ -979,7 +993,7 @@ function think(i,h,p,now){
     if(k>=0){if(!p.job||p.job.type!=='farm'||p.job.k!==k){p.job={type:'farm',k};if(!goTo(p,k,k%N+1,((k/N)|0)+1.2))p.job=null;}return;}}
   if(p.job&&p.job.type==='square')return;
   if(p.job){p.job=null;goTo(p,p.home,p.home%N+.5,((p.home/N)|0)+1.4);return;}
-  if(!p.king&&!p.witch&&p.mode==='wander')visitSquare(i,p,now);
+  if(!p.king&&!p.witch&&!p.shepherd&&p.mode==='wander')visitSquare(i,p,now);
 }
 const SQ_SPOTS=[[-.85,.35],[.85,.35],[-.45,.8],[.45,.8],[-.75,-.25],[.75,-.25],[0,.95]];
 function visitSquare(i,p,now){const c=comp[i];let k=-1;for(const q of squares.keys())if(comp[q]===c)k=q;if(k<0)return;
@@ -994,12 +1008,12 @@ function updatePeople(now,dt){
     const hx=i%N+.5,hy=((i/N)|0)+.95;
     if(!people.has(i)){const fresh=age-PERSON_MS<3000;
       const king=isCastle(h),newKing=king&&now-(h.castle??0)<6000;
-      const witch=isWitch(h);
-      people.set(i,{x:hx,y:hy+(king?.1:0),tx:hx,ty:hy+(king?1.1:.7),wait:newKing?900:0,born:fresh||newKing?now:now-5000,face:1,step:0,look:king?kingLook(i):witch?witchLook(i):personLook(i),body:king?KING_BODY:witch?WITCH_BODY:null,king,witch,mode:'wander',home:i,job:null,path:[],thinkAt:0});}
+      const witch=isWitch(h),shep=isShepherd(h);
+      people.set(i,{x:hx,y:hy+(king?.1:0),tx:hx,ty:hy+(king?1.1:.7),wait:newKing?900:0,born:fresh||newKing?now:now-5000,face:1,step:0,look:king?kingLook(i):witch?witchLook(i):shep?shepLook(i):personLook(i),body:king?KING_BODY:witch?WITCH_BODY:shep?SHEP_BODY:null,king,witch,shepherd:shep,mode:'wander',home:i,job:null,path:[],thinkAt:0});}
     const p=people.get(i);
     if(dragon)continue;
     if(now>=p.thinkAt){p.thinkAt=now+1500;think(i,h,p,now);}
-    const mv=WALK*(p.king?.7:1)*dt/1000;
+    const mv=WALK*(p.king?.7:p.shepherd?.75:1)*dt/1000;
     if(p.mode==='go'){const t=p.path[0];if(!t){p.mode='wander';continue;}
       const dx=t[0]-p.x,dy=t[1]-p.y,d=Math.hypot(dx,dy);
       if(Math.abs(dx)>.05)p.face=dx>0?1:-1;p.step+=dt;
@@ -1051,9 +1065,9 @@ function updatePeople(now,dt){
       continue;}
     if(p.wait>0){p.wait-=dt;continue;}
     const dx=p.tx-p.x,dy=p.ty-p.y,d=Math.hypot(dx,dy);
-    if(d<=mv){p.x=p.tx;p.y=p.ty;p.wait=1200+Math.random()*3000;p.step=0;
+    if(d<=mv){p.x=p.tx;p.y=p.ty;p.wait=p.shepherd?2500+Math.random()*4500:1200+Math.random()*3000;p.step=0;
       if(p.mode==='farm'&&p.job){const fx=p.job.k%N,fy=(p.job.k/N)|0;p.tx=fx+.25+Math.random()*1.5;p.ty=fy+.5+Math.random()*1.4;}
-      else for(let k=0;k<12;k++){const tx=hx+(Math.random()*5-2.5),ty=hy+.4+Math.random()*1.8;if(onGrass(tx,ty)&&!solidAt(tx,ty)&&fieldAt(Math.floor(ty)*N+Math.floor(tx))<0){p.tx=tx;p.ty=ty;break;}}}
+      else for(let k=0;k<12;k++){const R=p.shepherd?4.5:2.5,tx=hx+(Math.random()*2*R-R),ty=p.shepherd?hy-1.2+Math.random()*3.6:hy+.4+Math.random()*1.8;if(onGrass(tx,ty)&&!solidAt(tx,ty)&&fieldAt(Math.floor(ty)*N+Math.floor(tx))<0){p.tx=tx;p.ty=ty;break;}}}
     else{const nx=p.x+dx/d*mv,ny=p.y+dy/d*mv;
       const free=!solidAt(nx,ny)||solidAt(p.x,p.y);
       if(free&&(p.mode==='farm'||onGrass(nx,ny)||Math.hypot(p.x-hx,p.y-hy)<.8)){p.x=nx;p.y=ny;}else{p.tx=p.x;p.ty=p.y;}
@@ -1090,6 +1104,9 @@ function drawPerson(p,ts,kp,now){
     const tipx=X(9)+kp/2,tipy=oy+kp/2,wx=(p.job.w%N+.5)*ts,wy=(((p.job.w/N)|0)+.55)*ts,bob=Math.round(Math.sin(now/350)*kp*.6);
     tctx.strokeStyle='rgba(232,243,230,.75)';tctx.lineWidth=Math.max(1,kp/3);tctx.beginPath();tctx.moveTo(tipx,tipy);tctx.quadraticCurveTo((tipx+wx)/2,Math.max(tipy,wy)+kp*2,wx,wy+bob);tctx.stroke();
     tctx.fillStyle='#d9483b';tctx.fillRect(Math.round(wx-kp/2),Math.round(wy+bob-kp),kp,kp);tctx.fillStyle='#fafaf0';tctx.fillRect(Math.round(wx-kp/2),Math.round(wy+bob),kp,kp);}
+  if(p.shepherd){// a ciupaga, the mountain walking stick with a little axe head on top
+    const top=oy+3*kp,sx=X(5);tctx.fillStyle='#5e3a22';for(let r=0;r<8;r++)tctx.fillRect(sx,top+r*kp,kp,kp);
+    tctx.fillStyle='#b8c0c8';tctx.fillRect(Math.min(X(5),X(6)),top-kp,kp*2,kp);tctx.fillRect(Math.min(X(4),X(5)),top-kp,kp*2,kp);}
   if(p.witch){// broom held upright beside her, bristles at the bottom
     const top=oy+4*kp,sx=X(5),bx=Math.min(X(5),X(6));
     tctx.fillStyle='#5e3a22';for(let r=0;r<7;r++)tctx.fillRect(sx,top+r*kp,kp,kp);
@@ -1214,6 +1231,37 @@ function drawCat(c,ts,kp,now){
       tctx.globalAlpha=Math.min(1,(now-c.born)/900)*(t<.15?t/.15:t>.7?Math.max(0,(1-t)/.3):1);
       tctx.fillStyle='#22363d';for(let r=0;r<4;r++)for(let q=0;q<4;q++)if(ZGLYPH[r][q]==='#')tctx.fillRect(zx+q*sz-1,zy+r*sz-1,sz+2,sz+2);
       tctx.fillStyle='#fafaf0';for(let r=0;r<4;r++)for(let q=0;q<4;q++)if(ZGLYPH[r][q]==='#')tctx.fillRect(zx+q*sz,zy+r*sz,sz,sz);}}
+  tctx.globalAlpha=1;}
+// ---- the shepherd's three sheep: they trail behind him in a little bunch and stop to graze now and then
+const SHEEP_STAND=['.wWWw..','WWWWWFF','WWWWWFE','.wWWw..'];
+const SHEEP_GRAZE=['.wWWw..','WWWWW..','WWWWWF.','.wWWwFE'];
+const SHEEP_LEGS=[['.L..L..'],['..L..L.']];
+const SHEEP_COL={W:'#f4f1e6',w:'#d6cfbd',F:'#3a3236',E:'#f4f1e6',L:'#3a3236'};
+const FLOCK=[[-.6,.18],[-1.0,-.15],[-.95,.45]];
+let sheep=new Map();
+function updateSheep(now,dt){
+  for(const i of [...sheep.keys()])if(!people.has(i)||!people.get(i).shepherd)sheep.delete(i);
+  for(const[i,p]of people){if(!p.shepherd)continue;
+    if(!sheep.has(i))sheep.set(i,FLOCK.map(([ox,oy],j)=>({x:p.x+ox*.4,y:p.y+oy*.3,face:1,mode:'stand',until:now+1500+j*700,step:j*90,born:now+j*350})));
+    sheep.get(i).forEach((s,j)=>{const[ox,oy]=FLOCK[j],tx=p.x+ox*(p.face<0?-1:1),ty=p.y+oy,dx=tx-s.x,dy=ty-s.y,d=Math.hypot(dx,dy);
+      // a grazing sheep keeps eating until the shepherd has wandered a little way off
+      if(s.mode==='graze'&&d<1.9&&now<s.until)return;
+      if(d>.4){s.mode='walk';const sp=(d>2?1.3:.75)*dt/1000,nx=s.x+dx/d*Math.min(sp,d),ny=s.y+dy/d*Math.min(sp,d);
+        if((solidAt(nx,ny)&&!solidAt(s.x,s.y)||!onGrass(nx,ny)&&onGrass(s.x,s.y))&&(s.stuck=(s.stuck||0)+dt)<2500)return;
+        s.stuck=0;s.x=nx;s.y=ny;s.step+=dt;if(Math.abs(dx)>.03)s.face=dx>0?1:-1;}
+      else{if(s.mode==='walk'){s.mode='stand';s.until=now+800+Math.random()*2500;}
+        if(now>=s.until){if(Math.random()<.55){s.mode='graze';s.until=now+4000+Math.random()*7000;}else{s.mode='stand';s.until=now+1500+Math.random()*3000;}}}});}}
+function drawSheep(s,ts,kp,now){
+  const grazing=s.mode==='graze',rows=(grazing?SHEEP_GRAZE:SHEEP_STAND).concat(SHEEP_LEGS[s.mode==='walk'?Math.floor(s.step/170)%2:0]);
+  const Wd=7,w=Wd*kp,h=rows.length*kp,ox=Math.round(s.x*ts-w/2),oy=Math.round(s.y*ts-h);
+  const X=c=>ox+(s.face<0?Wd-1-c:c)*kp;
+  tctx.globalAlpha=Math.max(0,Math.min(1,(now-s.born)/900));
+  tctx.fillStyle='rgba(20,40,30,.25)';tctx.fillRect(ox+kp,oy+h-kp/2,(Wd-2)*kp,kp);
+  // a grazing sheep's head bobs as it nibbles
+  const bob=grazing&&Math.floor(now/450+s.step)%3===0?kp:0;
+  tctx.fillStyle='#22363d';
+  for(let r=0;r<rows.length;r++)for(let c=0;c<Wd;c++)if(rows[r][c]!=='.'){const yy=oy+r*kp+(bob&&c>=5?bob:0);for(const[a,b]of D4)tctx.fillRect(X(c)+a*kp*(s.face<0?-1:1),yy+b*kp,kp,kp);}
+  for(let r=0;r<rows.length;r++)for(let c=0;c<Wd;c++){const ch=rows[r][c];if(ch==='.')continue;tctx.fillStyle=SHEEP_COL[ch];tctx.fillRect(X(c),oy+r*kp+(bob&&c>=5?bob:0),kp,kp);}
   tctx.globalAlpha=1;}
 // ---- the princess: steps out of the castle soon after the king and strolls about her town.
 // Villagers she passes get a little heart above their heads.
@@ -1590,7 +1638,8 @@ function showGuide(){if(sheetOpen&&stage!=='guide'&&stage!=='welcome'){toast(tr(
    <h3>${tr('Town square','町の広場')}</h3>
    ${row(`<img alt="" src="${rowsURL(FOUNTAIN.map(r=>r.replace(/w/g,'.')),FOUNTC)}">`,tr('When <b>3 two-storey houses</b> stand close to an open patch of grass (2×2 tiles) on the same island, a <b>town square</b> with a fountain and a notice board is built there for <b>8 gold</b>.','同じ島で、<b>2階建ての家が3つ</b>、草地（2×2マス）の近くにあると、<b>8ゴールド</b>で噴水と掲示板のある<b>町の広場</b>ができます。'))}
    <h3>${tr('And more','そのほか')}</h3>
-   ${row(`<img alt="" src="${wholeURL(witchImg)}">`,tr('The first house on an island away from the main island is a <b>witch’s hut</b>.','本島からはなれた島に最初に建てた家は<b>魔女の小屋</b>になります。'))}
+   ${row(`<img alt="" src="${wholeURL(witchImg)}">`,tr('The first house on an island away from the main island is a <b>witch’s hut</b>. There is only one in the kingdom.','本島からはなれた島に最初に建てた家は<b>魔女の小屋</b>になります。王国に1つだけです。'))}
+    ${shepHut?row(`<img alt="" src="${shepHut.toDataURL()}">`,tr('The first house on the next lone island is a <b>shepherd’s hut</b>.','次のはなれた島に最初に建てた家は<b>羊飼いの小屋</b>になります。')):''}
    ${row(`<img alt="" src="${rowsURL(GUIDE_LANTERN,{d:'#8a5a36',L:'#ffd23f',Y:'#fff3b0',P:'#8a5a36'})}">`,tr('With 4 buildings, <b>roads</b> join them. <b>Lanterns</b> light the roads and <b>bridges</b> reach islands one tile away, 1 gold each. They appear by themselves.','建物が4つになると<b>道</b>ができます。<b>ランタン</b>が道を照らし、1マスはなれた島には<b>橋</b>がかかります（各1ゴールド）。どちらも自然にできます。'))}
    </div><div class="row"><button id="qDone">${tr('Back to building','町づくりにもどる')}</button><button id="gLang" class="ghost">${LANG==='ja'?'English':'日本語'}</button></div>`;
   $('gLang').onclick=()=>{setLang(LANG==='ja'?'en':'ja');showGuide();};$('qBody').scrollTop=0;$('qDone').onclick=closeSheet;if($('tutGo')){$('tutGo').onclick=closeSheet;$('tutGo').focus({preventScroll:true});}else $('qDone').focus({preventScroll:true});}
@@ -1951,14 +2000,15 @@ function tryHouse(c){const i=c.y*N+c.x;
   // clicking a house (or right beside it) upgrades it to its second-row version
   for(const[j,h]of houses){if(cheb(j,i)<=1){const v=h.v??hash(j,3)%5;
     if(v<5){if(!pay(UPGRADE_COST,tr(`An upgrade costs ${UPGRADE_COST} gold`,`増築は${UPGRADE_COST}ゴールドです`)))return false;houses.set(j,{t:Date.now(),b:h.b??h.t,v:v+5,f:h.f??(hash(j,9)%2===1),paid:housePaid(h)+UPGRADE_COST});splashes.push({x:(j%N)*T+8,y:((j/N)|0)*T+10,t:performance.now()});return true;}
-    toast(v===WITCH?tr('The witch likes her hut just as it is','魔女は今の小屋が気に入っています'):v===CASTLE?tr('The castle is as grand as it gets','お城はこれ以上大きくなりません'):v>=10?tr('Shops can\'t be upgraded','お店は増築できません'):tr('This house is fully upgraded','この家はもう増築できません'));return false;}}
+    toast(v===SHEPHERD?tr('The shepherd likes his hut just as it is','羊飼いは今の小屋が気に入っています'):v===WITCH?tr('The witch likes her hut just as it is','魔女は今の小屋が気に入っています'):v===CASTLE?tr('The castle is as grand as it gets','お城はこれ以上大きくなりません'):v>=10?tr('Shops can\'t be upgraded','お店は増築できません'):tr('This house is fully upgraded','この家はもう増築できません'));return false;}}
   if(!supported(i)){toast(tr('A house needs land all around it','家を建てるには、まわりがすべて土地である必要があります'));return false;}
   for(const k of squares.keys())for(const q of sqCells(k)){const dx=Math.abs(q%N-c.x),dy=((q/N)|0)-c.y;if(dx<=1&&dy>=-1&&dy<=1){toast(tr('Too close to the town square','町の広場に近すぎます'));return false;}}
   for(let dy=-1;dy<=1;dy++)for(let dx=-2;dx<=2;dx++){const q=(c.y+dy)*N+c.x+dx;if(L(c.x+dx,c.y+dy)&&fieldAt(q)>=0){toast(tr('That land is a wheat field','そこは小麦畑です'));return false;}}
   for(const[h,hv]of houses){const dx=Math.abs(h%N-c.x),dy=Math.abs(((h/N)|0)-c.y),cs=isCastle(hv);if(dx<=(cs?4:3)&&dy<=(cs?2:1)){toast(cs?tr('Too close to the castle','お城に近すぎます'):tr('Too close to another house','ほかの家に近すぎます'));return false;}}
   for(const[t,tt]of trees)if(tt.apple&&grid[t]&&cheb(t,i)<=2){toast(tr('Too close to the apple tree. It can’t be cut down','りんごの木に近すぎます。りんごの木は切れません'));return false;}
   if(!pay(HOUSE_COST,tr(`A house costs ${HOUSE_COST} gold`,`家は${HOUSE_COST}ゴールドです`)))return false;
-  {const now=Date.now(),w=remoteIsland(i);houses.set(i,{t:now,b:now,v:w?WITCH:Math.floor(Math.random()*5),f:Math.random()<.5,paid:HOUSE_COST});if(w)toast(tr('A witch has moved in!','魔女が引っこしてきました！'));}
+  {const now=Date.now(),lone=remoteIsland(i),hv=[...houses.values()],w=lone&&!hv.some(isWitch),sp=lone&&!w&&!hv.some(isShepherd);
+    houses.set(i,{t:now,b:now,v:w?WITCH:sp?SHEPHERD:Math.floor(Math.random()*5),f:Math.random()<.5,paid:HOUSE_COST});if(w)toast(tr('A witch has moved in!','魔女が引っこしてきました！'));else if(sp)toast(tr('A shepherd has moved in!','羊飼いが引っこしてきました！'));}
   for(const j of [...trees.keys()])if(cheb(j,i)<=2){trees.delete(j);decided[j]=0;}
   splashes.push({x:c.x*T+8,y:c.y*T+10,t:performance.now()});return true;}
 function cellAt(e){const r=cv.getBoundingClientRect();const x=Math.floor((e.clientX-r.left)/r.width*W/T),y=Math.floor((e.clientY-r.top)/r.height*H/T);return x>=0&&y>=0&&x<N&&y<N?{x,y}:null;}
