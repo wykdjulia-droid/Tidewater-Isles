@@ -2049,7 +2049,7 @@ function sinkCoast(){const coast=[];for(let i=0;i<N*N;i++)if(grid[i]&&touchesWat
   history=[];future=[];histUI();rebuild();render();drawTrees();
   toast(lost.length?tr('The sea swallowed part of an island, and a building was lost!','海が島の一部をのみこみ、建物がなくなってしまいました！'):tr('The sea swallowed part of an island!','海が島の一部をのみこみました！'));
   return true;}
-// ---- the earthquake: when the whole board is land, the ground shakes and cracks into islands. Two winding cracks of
+// ---- earthquakes: when 90% or more of the board is land, the ground shakes and cracks into islands. Two winding cracks of
 // sea, two down and two across, split the land into about nine islands. Anything on a crack, or left without enough
 // land beside it, is lost with no gold back (like the sea) - except castles: the cracks always go around them.
 // It happens every time the board is filled, including boards that were already full before this was added.
@@ -2057,7 +2057,18 @@ let quake=null;
 // tiles hidden under the letters button or the i button can't be tapped, so they count as filled
 function underButton(i){const r=cv.getBoundingClientRect();if(!r.width)return false;const x=r.left+(i%N+.5)*r.width/N,y=r.top+(((i/N)|0)+.5)*T*r.height/H;
   for(const id of['lettersBtn','infoBtn']){const e=$(id);if(!e||e.hidden||!e.offsetParent)continue;const b=e.getBoundingClientRect();if(x>=b.left-3&&x<=b.right+3&&y>=b.top-3&&y<=b.bottom+3)return true;}return false;}
-function quakeCheck(){if(quake||sheetOpen||painting!==null)return;for(let i=0;i<N*N;i++)if(!grid[i]&&!underButton(i))return;startQuake();}
+const QUAKE_FULL=.9,QUAKE_RARE=1/3000,QUAKE_RARE_AFTER=900000;   // 90% of the board; rare ones about once every 50 min of play, after the first 15
+function quakeCheck(){if(quake||sheetOpen||painting!==null)return;let land=0;for(let i=0;i<N*N;i++)if(grid[i]||underButton(i))land++;
+  if(land<N*N*QUAKE_FULL){if(Q.quakeArmed===false){Q.quakeArmed=true;saveQuiz();}
+    // now and then, very rarely, a quake comes out of nowhere (only while the game is being played)
+    if(!document.hidden&&!dragon&&played>=QUAKE_RARE_AFTER&&Math.random()<QUAKE_RARE&&grid.some(v=>v))startQuake('rare');return;}
+  if(Q.quakeArmed===false)return;Q.quakeArmed=false;saveQuiz();startQuake('full');}
+// a rare quake: half the time the ground only shakes; otherwise a short crack opens from a shore into an island
+function shortCrack(){const shore=[];for(let i=0;i<N*N;i++)if(grid[i]&&!castleZone(i)&&touchesWater(i))shore.push(i);if(!shore.length)return[];
+  let c=shore[Math.floor(Math.random()*shore.length)];const path=[c],len=4+Math.floor(Math.random()*6);
+  while(path.length<len){const x=c%N,y=(c/N)|0,nb=[];for(const[a,b]of D4){const nx=x+a,ny=y+b;if(!L(nx,ny))continue;const q=ny*N+nx;if(path.includes(q)||castleZone(q))continue;nb.push(q);}
+    if(!nb.length)break;c=nb[Math.floor(Math.random()*nb.length)];path.push(c);}
+  return path;}
 // castles (and the land they stand on) never crack; everything else is fair game
 function castleZone(i){const x=i%N,y=(i/N)|0;for(const[h,hv]of houses){if(!isCastle(hv))continue;if(Math.abs(h%N-x)<=2&&Math.abs(((h/N)|0)-y)<=1)return true;}return false;}
 function crackCost(i){return castleZone(i)?1e6:1+Math.random()*3;}
@@ -2070,11 +2081,12 @@ function crackLine(across,lo,hi){const cost=[],from=[];
   let t=lo;for(let q=lo;q<=hi;q++)if(cost[N-1][q]<cost[N-1][t])t=q;
   const out=[];for(let s=N-1;s>=0;s--){out.push(across?t*N+s:s*N+t);t+=from[s][t];}
   return out.reverse();}
-function startQuake(){quake={t:Date.now()};const fr=document.querySelector('.frame');fr.classList.add('quake');
+function startQuake(kind){const rare=kind==='rare';quake={t:Date.now()};const fr=document.querySelector('.frame');fr.classList.add('quake');
   toast(tr('The ground is shaking!','地面がゆれています！'),1500);
   setTimeout(()=>{
     // two cracks down and two across: the land breaks into about nine islands
-    const lines=[crackLine(false,3,7),crackLine(false,12,16),crackLine(true,3,7),crackLine(true,12,16)],order=[];for(let k=0;k<N;k++)for(const l of lines)order.push(l[k]);
+    let order=[];if(rare){if(Math.random()<.5)order=shortCrack();}
+    else{const lines=[crackLine(false,3,7),crackLine(false,12,16),crackLine(true,3,7),crackLine(true,12,16)];for(let k=0;k<N;k++)for(const l of lines)order.push(l[k]);}
     let k=0;const lost=[];
     const step=setInterval(()=>{
       for(let n=0;n<6&&k<order.length;n++,k++){const c=order[k];if(!grid[c]||castleZone(c))continue;
@@ -2088,7 +2100,8 @@ function startQuake(){quake={t:Date.now()};const fr=document.querySelector('.fra
         for(const m of [people,kids])for(const p of m.values()){if(p.inBoat)continue;if(!L(Math.floor(p.x),Math.floor(p.y-.05))){
           p.x=p.home%N+.5;p.y=((p.home/N)|0)+1.1;p.tx=p.x;p.ty=p.y;p.path=[];if(p.mode!=='boat'){p.mode='wander';p.job=null;}}}
         history=[];future=[];histUI();rebuild();render();drawTrees();save();quake=null;
-        toast(lost.length?tr('An earthquake! The land split into islands, and some buildings were lost.','地震です！土地がいくつかの島に分かれ、建物がいくつかこわれました。'):tr('An earthquake! The land split into islands.','地震です！土地がいくつかの島に分かれました。'),4500);}},70);
+        toast(rare?(!order.length?tr('An earthquake! Luckily, nothing was damaged.','地震です！さいわい、何もこわれませんでした。'):lost.length?tr('An earthquake! Part of an island sank, and a building was lost.','地震です！島の一部がしずみ、建物がこわれました。'):tr('An earthquake! Part of an island sank.','地震です！島の一部がしずみました。'))
+          :lost.length?tr('An earthquake! The land split into islands, and some buildings were lost.','地震です！土地がいくつかの島に分かれ、建物がいくつかこわれました。'):tr('An earthquake! The land split into islands.','地震です！土地がいくつかの島に分かれました。'),4500);}},70);
   },1500);}
 let last=0,lastG=0;function loop(ts){
   tickPlayed(ts);
